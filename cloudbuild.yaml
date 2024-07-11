@@ -4,14 +4,14 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/node-app:$COMMIT_SHA'
+      - 'gcr.io/qwiklabs-gcp-00-4976f22e9ecb/node-app:$COMMIT_SHA'
       - '.'
 
   # Push the Docker image to Google Container Registry (GCR)
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'gcr.io/$PROJECT_ID/node-app:$COMMIT_SHA'
+      - 'gcr.io/qwiklabs-gcp-00-4976f22e9ecb/node-app:$COMMIT_SHA'
 
   # Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -19,10 +19,11 @@ steps:
       - 'run'
       - 'deploy'
       - 'my-cloudrun-service'
-      - '--image=gcr.io/$PROJECT_ID/node-app:$COMMIT_SHA'
+      - '--image=gcr.io/qwiklabs-gcp-00-4976f22e9ecb/node-app:$COMMIT_SHA'
       - '--platform=managed'
-      - '--region=$REGION'  # Update with your desired region
+      - '--region=us-central1'  # Update with your desired region
       - '--allow-unauthenticated'  # Remove if authentication is required
 
-images:
-  - 'gcr.io/$PROJECT_ID/my-docker-image:$COMMIT_SHA'
+options:
+  logging: CLOUD_LOGGING_ONLY  # or NONE if you don't need logs
+  logsBucket: 'devops-bucket-11'  # Replace with your Cloud Storage bucket name
